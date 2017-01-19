@@ -17,15 +17,21 @@
 	</style>
 	<script type="text/javascript" src="Game.js"></script>
 	<script type="text/javascript" src="Entity.js"></script>
-	<script type="text/javascript" src="Rectangle.js"></script>
+	<script type="text/javascript" src="Geo.js"></script>
 	<script type="text/javascript">
 		var game;
 		document.addEventListener("DOMContentLoaded", function() {
 			game = new Game(document.getElementById("canvas"));
-			dot = new Entity(25, 25);
-			rect1 = new ColoredRect(25, 300, 100, 70, "green");
-			game.objects.push(dot);
+			circ1 = new ColoredCirc(game.canvas.width/2, 0, 20, "blue");
+			circ1.vY = 0;
+			rect1 = new ColoredRect(0, game.canvas.height-20, canvas.width, 20, "green");
+			game.objects.push(circ1);
 			game.objects.push(rect1);
+			circ1.update = function(game) {
+				if (!this.isTouching(rect1)) {
+					this.y++;
+				}
+			};
 			game.start();
 		});
 	</script>

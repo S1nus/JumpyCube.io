@@ -20,11 +20,41 @@ function Entity(x, y) {
 		return;
 	};
 
-	this.getSolidPixels = function() {
-		return [[this.x, this.y]];
+	this.getBox = function() {
+		return {"x":this.x, "y":this.y, "width":1, "height":1};
 	};
 
-	this.isTouching = function (obj) {
+	this.pixelInBox = function(box, x, y) {
+		return true;
+	};
 
+	this.getOverlappingBox = function(object) {
+		 myBox = this.getBox();
+		 otherBox = object.getBox();
+		 xMin = Math.max(myBox.x, otherBox.x);
+		 yMin = Math.max(myBox.y, otherBox.y);
+		 xMax = Math.min(myBox.x+myBox.width, otherBox.x+otherBox.width);
+		 yMax = Math.min(myBox.y+myBox.height, otherBox.y+otherBox.height);
+		 if (xMin >= xMax || yMin >= yMax) {
+			 return null;
+		 }
+		 else {
+			 return {"x":xMin, "y":yMin, "width":xMax-xMin, "height":yMax-yMin};
+		 }
+	};
+
+	this.isTouching = function(other) {
+		overLap = this.getOverlappingBox(other);
+		if (overLap == null) {
+			return false;
+		}
+		for (var row = overLap.y; row < overLap.y+overLap.height; row++) {
+			for (var coll = overLap.x; coll < overLap.x+overLap.width; coll++) {
+				if (this.pixelInBox(overLap, coll, row) && other.pixelInBox(overLap, coll, row)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	};
 }
